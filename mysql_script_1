@@ -28,5 +28,6 @@ DESCRIBE users;
 exit
 EOF
 
+# first 100 rows
 mysqldump mysql help_keyword --where='help_keyword_id<100' > dump100.sql
 
