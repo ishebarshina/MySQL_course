@@ -47,6 +47,7 @@ INSERT INTO `profiles` (`id`, `user_id`, `first_name`, `last_name`, `gender`, `b
 INSERT INTO `profiles` (`id`, `user_id`, `first_name`, `last_name`, `gender`, `birthday`, `city`, `country`, `created_at`, `updated_at`) VALUES (18, 18, 'Julius', 'Runte', '', '1991-04-02', 'Tremayneport', '679', '1976-06-15 15:37:20', '2009-11-09 02:17:17');
 INSERT INTO `profiles` (`id`, `user_id`, `first_name`, `last_name`, `gender`, `birthday`, `city`, `country`, `created_at`, `updated_at`) VALUES (19, 19, 'Cindy', 'Pollich', '', '1978-03-18', 'Marvinfurt', '93', '1975-08-24 06:17:34', '2004-03-22 03:06:01');
 INSERT INTO `profiles` (`id`, `user_id`, `first_name`, `last_name`, `gender`, `birthday`, `city`, `country`, `created_at`, `updated_at`) VALUES (20, 20, 'Adah', 'Koss', '', '1978-07-18', 'Howeland', '16', '1980-09-16 20:30:35', '2000-01-29 07:32:44');
+UPDATE profiles SET gender = 1 + ROUND(RAND() * 2);
 
 -- communities
 INSERT INTO `communities` (`id`, `name`, `created_at`, `updated_at`) VALUES (1, 'totam', '1981-06-17 08:20:21', '2021-07-02 16:24:39');
@@ -284,6 +285,7 @@ INSERT INTO `like_types` (`id`, `like_type_name`) VALUES (2, 'reprehenderit');
 INSERT INTO `entity_types` (`id`, `entity_name`) VALUES (3, 'tempore');
 INSERT INTO `entity_types` (`id`, `entity_name`) VALUES (1, 'voluptate');
 INSERT INTO `entity_types` (`id`, `entity_name`) VALUES (2, 'voluptatibus');
+INSERT INTO `entity_types` (`id`, `entity_name`) VALUES (4, 'volfdddfdibus');
 
 -- likes
 INSERT INTO `likes` (`id`, `entity_id`, `from_user_id`, `like_type_id`, `created_at`, `updated_at`) VALUES (1, 1, 1, 1, '1978-04-25 10:42:10', '1988-01-15 08:45:36');

@@ -116,6 +116,7 @@ CREATE TABLE media (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
   media_type_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на тип контента',
   filename varchar(1000) NOT NULL COMMENT 'Путь в файлу',
+  metadata VARCHAR(100) COMMENT 'Данные',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Время создания строки',
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Время обновления строки'
 ) COMMENT 'Медиа';
