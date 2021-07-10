@@ -42,3 +42,13 @@ AS day_number,
 FROM users 
 GROUP BY day_number
 ORDER BY day_number;
+
+SELECT COUNT(*), 
+(SELECT day_name 
+	FROM days_of_week 
+		WHERE days_of_week.id = 
+		DAYOFWEEK(STR_TO_DATE(CONCAT(EXTRACT(YEAR FROM NOW()), '-', EXTRACT(MONTH FROM birthday_at), '-', EXTRACT(DAY FROM birthday_at)), '%Y-%m-%d')) )
+		AS `day`
+FROM users 
+GROUP BY `day`
+ORDER BY `day`;
