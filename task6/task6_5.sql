@@ -66,7 +66,16 @@ WITH likes_and_messages AS (
 		messages m 
 )
 SELECT 
-	U_ID, COUNT(1)
+	U_ID, 
+	(
+	SELECT 
+		CONCAT_WS(' ', first_name, last_name)
+	FROM 
+		profiles p 
+	WHERE 
+		p.user_id = U_ID
+	) AS user_full_name,
+	COUNT(1)
 FROM 
 	likes_and_messages
 GROUP BY 
@@ -74,9 +83,6 @@ GROUP BY
 ORDER BY 
 	COUNT(1), U_ID ASC
 LIMIT 10;  -- 
-
-
-
 
 
 
