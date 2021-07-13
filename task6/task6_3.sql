@@ -14,6 +14,7 @@ USE vk;
 -- UPDATE likes SET entity_object_id = ROUND(1 + RAND() * 99);
 
 
+
 -- профили 10 самых молодых мользователей
 -- SELECT * FROM profiles p 
 -- ORDER BY birthday DESC

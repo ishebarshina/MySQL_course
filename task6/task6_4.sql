@@ -10,6 +10,7 @@ USE vk;
 -- SELECT * FROM likes l ;
 -- UPDATE likes SET entity_object_id = ROUND(1 + RAND() * 99);
 
+
 -- Посчитаем, сколько всего лайков поставили женщны
 SELECT COUNT(1) 
 FROM likes l
