@@ -1,4 +1,0 @@
-USE vk;
-
-SHOW TABLES;
-SELECT * FROM users;

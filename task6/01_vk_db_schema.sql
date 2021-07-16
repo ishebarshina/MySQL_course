@@ -13,6 +13,7 @@ CREATE TABLE users (
 );
 
 ALTER TABLE users AUTO_INCREMENT=1;
+-- ALTER TABLE users ADD CONSTRAINT phone_check CHECK (REGEXP_LIKE(PHONE, '^\\+7[0-9]{10}$'));
 
 -- Таблица профилей с личными данными пользователя. Версионная 
 DROP TABLE IF EXISTS `profiles`;
@@ -174,7 +175,8 @@ CREATE TABLE entity_types (
 DROP TABLE IF EXISTS likes;
 CREATE TABLE likes (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
-  entity_id int unsigned NOT NULL COMMENT 'Ссылка на идентификатор сущности',
+  entity_id int unsigned NOT NULL COMMENT 'Ссылка на тип сущности',
+--   entity_object_id int unsigned NOT NULL COMMENT 'Ссылка на id объекста сущности',
   from_user_id int unsigned NOT NULL COMMENT 'Ссылка на идентификатор пользователя',
   like_type_id int unsigned NOT NULL COMMENT 'Ссылка на тип лайка',
   created_at datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Время создания строки',
