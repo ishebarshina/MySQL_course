@@ -1,0 +1,197 @@
+DROP DATABASE IF EXISTS vk;
+CREATE DATABASE vk;
+
+USE vk;
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,    
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(100) NOT NULL UNIQUE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE users AUTO_INCREMENT=1;
+-- ALTER TABLE users ADD CONSTRAINT phone_check CHECK (REGEXP_LIKE(PHONE, '^\\+7[0-9]{10}$'));
+ 
+DROP TABLE IF EXISTS `profiles`;
+CREATE TABLE `profiles` (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  user_id INT UNSIGNED NOT NULL UNIQUE, 
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  gender CHAR(1) NOT NULL,
+  birthday DATE NOT NULL,
+  city VARCHAR(130),
+  country VARCHAR(130),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE `profiles` ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+
+DROP TABLE IF EXISTS communities;
+CREATE TABLE communities (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,     
+  `name` VARCHAR(150) NOT NULL UNIQUE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,  
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  
+);
+
+DROP TABLE IF EXISTS communities_users;
+CREATE TABLE communities_users (
+  community_id INT UNSIGNED NOT NULL,  
+  user_id INT UNSIGNED NOT NULL,  
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,  
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  
+);
+
+ALTER TABLE communities_users ADD CONSTRAINT pk_communities_users PRIMARY KEY (community_id, user_id);
+
+ALTER TABLE communities_users ADD CONSTRAINT fk_community_id FOREIGN KEY (community_id) REFERENCES communities(id);
+ALTER TABLE communities_users ADD CONSTRAINT fk_member_id FOREIGN KEY (user_id) REFERENCES users(id);
+
+DROP TABLE IF EXISTS friendship;
+CREATE TABLE friendship (
+  user_id INT UNSIGNED NOT NULL,
+  friend_id INT UNSIGNED NOT NULL,
+  `status` VARCHAR(100) NOT NULL,
+  requested_at DATETIME DEFAULT NOW(),
+  confirmed_at DATETIME,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,  
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE friendship ADD CONSTRAINT pk_friendship PRIMARY KEY (user_id, friend_id); 
+ALTER TABLE friendship ADD CONSTRAINT fk_current_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE friendship ADD CONSTRAINT fk_friend_id FOREIGN KEY (friend_id) REFERENCES users(id);
+
+CREATE TABLE messages (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,     
+  sender_id INT UNSIGNED NOT NULL,
+  reciever_id INT UNSIGNED NOT NULL,
+  send_at DATETIME DEFAULT NOW(),
+  recieved_at DATETIME,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,  
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE messages ADD CONSTRAINT fk_sender_id FOREIGN KEY (sender_id) REFERENCES users(id);
+ALTER TABLE messages ADD CONSTRAINT fk_reciever_id FOREIGN KEY (reciever_id) REFERENCES users(id);
+ 
+DROP TABLE IF EXISTS media_types;
+CREATE TABLE media_types (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS media;
+CREATE TABLE media (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  media_type_id INT UNSIGNED NOT NULL,
+  filename varchar(1000) NOT NULL,
+  metadata VARCHAR(100),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE media ADD CONSTRAINT fk_media_type_id FOREIGN KEY (media_type_id) REFERENCES media_types(id);
+
+DROP TABLE IF EXISTS messages_media;
+CREATE TABLE messages_media (
+  message_id int unsigned NOT NULL,
+  media_id int unsigned NOT NULL,
+  created_at datetime DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE messages_media ADD CONSTRAINT fk_mm_media_id FOREIGN KEY (media_id) REFERENCES media (id);
+ALTER TABLE messages_media ADD CONSTRAINT fk_mm_message_id FOREIGN KEY (message_id) REFERENCES messages (id);
+
+DROP TABLE IF EXISTS posts;
+CREATE TABLE posts (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id int UNSIGNED DEFAULT NULL,
+  community_id int UNSIGNED DEFAULT NULL,
+  post_content text,
+  created_at datetime DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE posts ADD CONSTRAINT fk_post_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE posts ADD CONSTRAINT fk_post_community_id FOREIGN KEY (community_id) REFERENCES communities(id);
+
+DROP TABLE IF EXISTS posts_media;
+CREATE TABLE posts_media (
+  post_id int unsigned NOT NULL,
+  media_id int unsigned NOT NULL,
+  created_at datetime DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (post_id, media_id)
+);
+
+ALTER TABLE posts_media ADD CONSTRAINT fk_pm_media_id FOREIGN KEY (media_id) REFERENCES media(id);
+ALTER TABLE posts_media ADD CONSTRAINT fk_pm_post_id FOREIGN KEY (post_id) REFERENCES posts(id);
+
+DROP TABLE IF EXISTS like_types;
+CREATE TABLE like_types (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  like_type_name varchar(100) NOT NULL UNIQUE
+);
+
+DROP TABLE IF EXISTS entity_types;
+CREATE TABLE entity_types (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  entity_name varchar(100) NOT NULL UNIQUE
+);
+
+DROP TABLE IF EXISTS likes;
+CREATE TABLE likes (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  entity_id int unsigned NOT NULL,
+  from_user_id int unsigned NOT NULL,
+  like_type_id int unsigned NOT NULL,
+  created_at datetime DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE likes ADD CONSTRAINT fk_likes_entity_id FOREIGN KEY (entity_id) REFERENCES entity_types(id);
+ALTER TABLE likes ADD CONSTRAINT fk_likes_type_id FOREIGN KEY (like_type_id) REFERENCES like_types(id);
+ALTER TABLE likes ADD CONSTRAINT fk_likes_user_id FOREIGN KEY (from_user_id) REFERENCES users(id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
