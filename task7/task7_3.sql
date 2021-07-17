@@ -9,11 +9,12 @@ CREATE TABLE flights(
 	`to` VARCHAR(20) NOT NULL
 );
 
+-- Словарь
 DROP TABLE IF EXISTS cities;
 CREATE TABLE cities(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	label VARCHAR(20) NOT NULL, 
-	name VARCHAR(20) NOT NULL
+	label VARCHAR(20) NOT NULL UNIQUE, 
+	name VARCHAR(20) NOT NULL UNIQUE
 );
 
 INSERT INTO flights (`from`, `to`) VALUES 
@@ -28,7 +29,8 @@ INSERT INTO cities (label, name) VALUES
 	('irkutsk', 'Иркутск'), 
 	('novgorod', 'Новгород'),
 	('kazan', 'Казань'),
-	('omsk', 'Омск');
+	('omsk', 'Омск'),
+	('saratov', 'Саратов');
 	
 
 SELECT * FROM flights;
@@ -41,7 +43,7 @@ FROM
 		f.id, f.`from`, f.`to`, c.name 
 	FROM
 		flights f 
-	INNER JOIN 
+	LEFT JOIN 
 		cities c
 	ON 
 		f.`from` = c.label
@@ -52,7 +54,7 @@ LEFT JOIN
 		f.id, c.name 
 	FROM 
 		flights f 
-	INNER JOIN 
+	LEFT JOIN 
 		cities c
 	ON 
 		f.`to` = c.label
@@ -61,19 +63,6 @@ ON
 	t1.id = t2.id
 ORDER BY 
 		id;
- 
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
