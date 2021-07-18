@@ -225,12 +225,3 @@ GROUP BY youngs_names
 ORDER BY youngs_names;
 
 
--- FROM profiles pr INNER JOIN youngest_users yu ON (
--- 	pr.id = yu.id)
--- 	
--- WITH youngest_users AS (
--- 	SELECT * FROM profiles p 
--- 	ORDER BY birthday DESC
--- 	LIMIT 10
--- )
--- SELECT * FROM (messages m CROSS JOIN posts po) CROSS JOIN youngest_users yu;
