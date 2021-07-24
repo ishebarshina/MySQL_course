@@ -7,7 +7,7 @@ USE shop;
 SELECT u.id , u.name 
 FROM 
 	orders o
-LEFT JOIN  
+INNER JOIN  
 	users u
 ON 
 	u.id = o.user_id
