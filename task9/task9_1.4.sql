@@ -1,16 +1,14 @@
 USE example; 
 
--- Пусть имеется любая таблица с календарным полем created_at. Создайте
--- запрос, который удаляет устаревшие записи из таблицы, оставляя только 5 самых свежих
--- записей.
+-- РџСѓСЃС‚СЊ РёРјРµРµС‚СЃСЏ Р»СЋР±Р°СЏ С‚Р°Р±Р»РёС†Р° СЃ РєР°Р»РµРЅРґР°СЂРЅС‹Рј РїРѕР»РµРј created_at. 
+-- РЎРѕР·РґР°Р№С‚Рµ Р·Р°РїСЂРѕСЃ, РєРѕС‚РѕСЂС‹Р№ СѓРґР°Р»СЏРµС‚ СѓСЃС‚Р°СЂРµРІС€РёРµ Р·Р°РїРёСЃРё РёР· С‚Р°Р±Р»РёС†С‹, 
+-- РѕСЃС‚Р°РІР»СЏСЏ С‚РѕР»СЊРєРѕ 5 СЃР°РјС‹С… СЃРІРµР¶РёС… Р·Р°РїРёСЃРµР№
 
 -- generate data 
 DROP TABLE IF EXISTS august1;
 CREATE TABLE august1 (
 	created_at DATE
 );
-
-SELECT * FROM august1;
 
 DROP PROCEDURE IF EXISTS proc_generate_date; 
 DELIMITER $$
@@ -26,9 +24,28 @@ DELIMITER ;
 
 CALL proc_generate_date();
 
-SELECT * FROM august1;
+SELECT created_at AS ALL_TABLE FROM august1 
+ORDER BY created_at DESC;
 
+SELECT august1.created_at FROM (
+	august1 INNER JOIN (
+		SELECT created_at FROM august1
+		ORDER BY created_at DESC LIMIT 5, 1) AS a5
+	ON (
+		august1.created_at <= a5.created_at 
+	)
+)
+ORDER BY august1.created_at DESC ;
 
+DELETE august1 
+FROM ( august1 
+	INNER JOIN (
+		SELECT created_at FROM august1
+		ORDER BY created_at DESC LIMIT 5, 1) AS a5
+		ON (
+			august1.created_at <= a5.created_at 
+	)
+);
 
-
-
+SELECT created_at AS ALL_TABLE FROM august1 
+ORDER BY created_at DESC;
